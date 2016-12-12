@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@android:color/darker_gray"
+    android:theme="@style/Theme.Design.Light.NoActionBar"
+    android:paddingTop="@dimen/activity_vertical_margin">
+    <ImageView
+        android:id="@+id/profilePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/img"
+        android:adjustViewBounds="true"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/profilePhoto"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BBman"
+            android:textSize="30sp"/>
+        <TextView
+            android:id="@id/LV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lv."
+            android:textSize="28sp"
+            android:paddingStart="15dp"/>
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textSize="28sp" />
+    </LinearLayout>
+</RelativeLayout>
