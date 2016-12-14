@@ -17,7 +17,12 @@
         </activity>
         <activity android:name=".RankingListActivity" />
         <activity android:name=".CounterActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+
+        <service
+            android:name=".StepService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
