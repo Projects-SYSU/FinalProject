@@ -50,14 +50,14 @@
             </FrameLayout>
 
             <ImageView
-                android:id="@+id/profilePhoto"
+                android:id="@+id/photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
                 android:maxHeight="140dp"
                 android:maxWidth="140dp"
-                android:src="@mipmap/img" />
+                android:src="@mipmap/smile" />
         </RelativeLayout>
 
         <SeekBar
@@ -74,10 +74,11 @@
             android:layout_below="@id/seekBar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:text="120:00"
+            android:text="20:00"
             android:textSize="40sp" />
 
         <Button
+            android:id="@+id/startBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

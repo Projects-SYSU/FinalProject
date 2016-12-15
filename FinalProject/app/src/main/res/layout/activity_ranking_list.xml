@@ -25,7 +25,7 @@
                 android:id="@+id/profilePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/img"
+                android:src="@mipmap/smile"
                 android:adjustViewBounds="true"
                 android:maxHeight="50dp"
                 android:maxWidth="50dp"
