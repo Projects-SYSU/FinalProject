@@ -11,41 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="英雄榜"
-            android:textSize="30sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"/>
-
-        <com.sevenheaven.segmentcontrol.SegmentControl xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/segmentControl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            app:block_direction="horizon"
-            app:horizonGap="15dp"
-            app:normalColor="#FFFFFF"
-            app:selectedColor="#32ADFF"
-            app:texts="日排行|周排行" />
-
-        <ListView
-            android:id="@+id/rankingList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/segmentControl">
-        </ListView>
         <RelativeLayout
             android:id="@+id/userInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:background="@android:color/holo_blue_bright"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -61,7 +31,9 @@
                 android:maxWidth="50dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginStart="5dp"/>
+                android:layout_marginStart="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp" />
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
@@ -70,7 +42,8 @@
                 android:textSize="20sp"
                 android:paddingLeft="5dp"
                 android:layout_toEndOf="@+id/profilePhoto"
-                />
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@+id/profilePhoto" />
             <TextView
                 android:id="@+id/LV"
                 android:layout_width="wrap_content"
@@ -79,7 +52,9 @@
                 android:layout_toEndOf="@+id/name"
                 android:paddingStart="5dp"
                 android:textSize="16sp"
-                />
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@+id/name"
+                android:paddingLeft="5dp" />
             <TextView
                 android:id="@+id/level"
                 android:layout_width="wrap_content"
@@ -87,39 +62,47 @@
                 android:text="5"
                 android:layout_toEndOf="@+id/LV"
                 android:textSize="16sp"
-                />
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@+id/LV" />
             <LinearLayout
                 android:id="@+id/properties"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/profilePhoto"
                 android:layout_alignBottom="@id/profilePhoto"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_toRightOf="@id/profilePhoto">
                 <TextView
                     android:id="@+id/intellectLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="内功:"
-                    android:paddingLeft="5dp"/>
+                    android:paddingLeft="5dp"
+                    android:textColor="@android:color/white"/>
                 <TextView
                     android:id="@+id/intellect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="140分钟"
-                    android:paddingStart="2dp"/>
+                    android:paddingStart="2dp"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="2dp" />
 
                 <TextView
                     android:id="@+id/strengthLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="轻功:"
-                    android:paddingLeft="10dp"/>
+                    android:paddingLeft="10dp"
+                    android:textColor="@android:color/white"/>
                 <TextView
                     android:id="@+id/strength"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="30000步"
-                    android:paddingStart="2dp"/>
+                    android:paddingStart="2dp"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="2dp" />
             </LinearLayout>
 
             <TextView
@@ -129,8 +112,57 @@
                 android:text="5000+"
                 android:layout_alignParentEnd="true"
                 android:textSize="20sp"
-                android:background="@android:color/darker_gray"/>
+                android:textColor="@android:color/white"
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:id="@+id/divider_in_rankinglistac"
+            android:layout_below="@+id/userInfo"
+            android:background="@android:color/background_light"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider_in_rankinglistac"
+            android:id="@+id/title_relativelayout"
+            android:background="@android:color/holo_blue_bright">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="英雄榜"
+                android:textSize="30sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textColor="@android:color/white"
+                />
+        </RelativeLayout>
+
+
+        <!--<com.sevenheaven.segmentcontrol.SegmentControl xmlns:app="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/segmentControl"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/title"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:textSize="18sp"-->
+            <!--app:block_direction="horizon"-->
+            <!--app:horizonGap="15dp"-->
+            <!--app:normalColor="#FFFFFF"-->
+            <!--app:selectedColor="#32ADFF"-->
+            <!--app:texts="日排行|周排行" />-->
+
+        <ListView
+            android:id="@+id/rankingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_relativelayout"
+            android:divider="@android:drawable/divider_horizontal_bright">
+        </ListView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
