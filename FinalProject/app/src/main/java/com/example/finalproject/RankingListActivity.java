@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +38,34 @@ public class RankingListActivity extends AppCompatActivity {
 
     private Handler handler = new Handler();
 
-    public class MyAdaptor extends BaseAdapter {
+    private static class mRunnable implements Runnable {
+        MyAdaptor.ViewHolder viewHolder;
+        int rank;
+
+        public mRunnable(MyAdaptor.ViewHolder viewHolder, int rank) {
+            this.viewHolder = viewHolder;
+            this.rank = rank;
+        }
+
+        @Override
+        public void run() {
+            if (rank == 1) {
+                viewHolder.number.setBackgroundResource(R.drawable.gold);
+                viewHolder.number.setText("");
+            } else if (rank == 2) {
+                viewHolder.number.setBackgroundResource(R.drawable.silver);
+                viewHolder.number.setText("");
+            } else if (rank == 3) {
+                viewHolder.number.setBackgroundResource(R.drawable.copper);
+                viewHolder.number.setText("");
+            } else {
+                //nothing
+            }
+
+        }
+    }
+
+    public static class MyAdaptor extends BaseAdapter {
         private Context context;
         private List<Map<String, Object>> list;
         private Handler hander;
@@ -71,11 +99,12 @@ public class RankingListActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
+
             View convertView;
-            final ViewHolder viewHolder;
+            ViewHolder viewHolder;
 
             if (view == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.rankinglistitem, null);
+                convertView = LayoutInflater.from(context).inflate(R.layout.rankinglistitem, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.name = (TextView)convertView.findViewById(R.id.ranking_list_name);
                 viewHolder.number = (TextView)convertView.findViewById(R.id.ranking_list_number);
@@ -90,33 +119,23 @@ public class RankingListActivity extends AppCompatActivity {
             viewHolder.name.setText((String)list.get(position).get("name"));
             viewHolder.point.setText(Integer.toString((int)list.get(position).get("point")));
             viewHolder.number.setText(Integer.toString((int)list.get(position).get("rank_num")));
+            viewHolder.number.setBackgroundResource(0);  //remove the background
 
-            if (position == 0) hander.post(new Runnable() {
-                @Override
-                public void run() {
-                    viewHolder.number.setBackgroundResource(R.drawable.gold);
-                    viewHolder.number.setText("");
-                }
-            });
-            if (position == 1) hander.post(new Runnable() {
-                @Override
-                public void run() {
-                    viewHolder.number.setBackgroundResource(R.drawable.silver);
-                    viewHolder.number.setText("");
-                }
-            });
-            if (position == 2) hander.post(new Runnable() {
-                @Override
-                public void run() {
-                    viewHolder.number.setBackgroundResource(R.drawable.copper);
-                    viewHolder.number.setText("");
-                }
-            });
+            //set NO.1 NO.2 and NO.3 picture
+            if (position == 0) {
+                hander.post(new mRunnable(viewHolder, 1));
+            }
+            if (position == 1) {
+                hander.post(new mRunnable(viewHolder, 2));
+            }
+            if (position == 2) {
+                hander.post(new mRunnable(viewHolder, 3));
+            }
 
             return convertView;
         }
 
-        public class ViewHolder {
+        public static class ViewHolder {
             public TextView name;
             public TextView number;
             public TextView point;
@@ -127,7 +146,7 @@ public class RankingListActivity extends AppCompatActivity {
 
         @Override
         public int compare(Map<String, Object> object1, Map<String, Object> object2) {
-            if((int)object1.get("point") > (int)object2.get("point")) {
+            if((int)object1.get("point") < (int)object2.get("point")) {
                 return 1;
             } else if ((int)object1.get("point") > (int)object2.get("point")) {
                 return -1;
