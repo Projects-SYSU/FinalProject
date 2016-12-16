@@ -1,10 +1,13 @@
 package com.example.finalproject;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -35,11 +38,26 @@ public class MainActivity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     private SharedPreferences sharedPreferences;
+    private StepService stepService;
+
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            stepService = ((StepService.MyBinder)iBinder).getService();
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            stepService = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, StepService.class);
+        bindService(intent, sc, BIND_AUTO_CREATE);
 
         numberFormat.setMinimumIntegerDigits(2);
         sharedPreferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
