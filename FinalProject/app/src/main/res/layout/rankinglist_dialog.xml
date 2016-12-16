@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="轻功："
+        android:id="@+id/rl_dialog_qingtag"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30000步"
+        android:id="@+id/rl_dialog_qing"
+        android:layout_toRightOf="@+id/rl_dialog_qingtag"
+        android:layout_alignBottom="@+id/rl_dialog_qingtag"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内功："
+        android:id="@+id/rl_dialog_neitag"
+        android:layout_below="@+id/rl_dialog_qingtag"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2000分钟"
+        android:id="@+id/rl_dialog_nei"
+        android:layout_toRightOf="@+id/rl_dialog_neitag"
+        android:layout_alignBottom="@+id/rl_dialog_neitag"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+
+</RelativeLayout>

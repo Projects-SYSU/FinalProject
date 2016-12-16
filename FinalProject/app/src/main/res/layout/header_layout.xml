@@ -28,12 +28,13 @@
             android:text="BBman"
             android:textSize="30sp"/>
         <TextView
-            android:id="@id/LV"
+            android:id="@+id/LV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lv."
             android:textSize="28sp"
-            android:paddingStart="15dp"/>
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp" />
         <TextView
             android:id="@+id/level"
             android:layout_width="wrap_content"
