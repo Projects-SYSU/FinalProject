@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -37,8 +38,8 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     private NavigationView navigationView;
     private List<Map<String, Object>> list_datas = new LinkedList();
     private Map<String, Object> ME = new HashMap<>();
-    private TextView myrank;
-    private TextView mypoint;
+//    private TextView myrank;
+//    private TextView mypoint;
     private MyAdaptor myAdaptor;
     private RefreshListView refreshListView;
 
@@ -56,10 +57,12 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     public class MyAdaptor extends BaseAdapter {
         private Context context;
         private List<Map<String, Object>> list;
+        private Map<String, Object> me;
 
-        public MyAdaptor(Context context, List<Map<String, Object>> list) {
+        public MyAdaptor(Context context, List<Map<String, Object>> list, Map<String, Object> me) {
             this.context = context;
             this.list = list;
+            this.me = me;
         }
 
         @Override
@@ -106,6 +109,11 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
             viewHolder.point.setText(Integer.toString((int)list.get(position).get("point")));
             viewHolder.rank.setText(Integer.toString((int)list.get(position).get("rank_num")));
             viewHolder.rank.setBackgroundResource(0);  //remove the background
+            convertView.setBackgroundColor(ContextCompat.getColor(RankingListActivity.this, R.color.white));
+
+            if (list.get(position).get("name").equals(me.get("name"))) {
+                convertView.setBackgroundColor(ContextCompat.getColor(RankingListActivity.this, R.color.bright_gray));
+            }
 
             //set NO.1 NO.2 and NO.3 picture
             if (position == 0) {
@@ -121,7 +129,6 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                 viewHolder.rank.setBackgroundResource(R.drawable.copper);
                 viewHolder.rank.setText("");
             }
-
             return convertView;
         }
 
@@ -160,7 +167,7 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
 
         init_list_data();
         sort_list_data();
-        myAdaptor = new MyAdaptor(this, list_datas);
+        myAdaptor = new MyAdaptor(this, list_datas, ME);
         refreshListView.setAdapter(myAdaptor);
         refreshListView.setInterface(RankingListActivity.this);
         refreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,8 +200,8 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
         navigationView = (NavigationView) findViewById(R.id.nvMenu);
         //listView = (ListView)findViewById(R.id.rankingList);
         refreshListView = (RefreshListView)findViewById(R.id.rankingList);
-        myrank = (TextView)findViewById(R.id.ranking_list_myrank);
-        mypoint = (TextView)findViewById(R.id.ranking_list_mypoint);
+//        myrank = (TextView)findViewById(R.id.ranking_list_myrank);
+//        mypoint = (TextView)findViewById(R.id.ranking_list_mypoint);
     }
 
     private void set_mydata() {
@@ -203,7 +210,7 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
         ME.put("qing", 20005);
         ME.put("nei", 105);
 
-        mypoint.setText(String.valueOf(5005));
+//        mypoint.setText(String.valueOf(5005));
     }
 
     private void update_data() {
@@ -224,7 +231,7 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
         for (int i = 0; i < list_datas.size(); ++i) {
             list_datas.get(i).put("rank_num", i + 1);
             if (list_datas.get(i).get("name").toString().equals(ME.get("name"))) {
-                myrank.setText(String.valueOf(i + 1));
+//                myrank.setText(String.valueOf(i + 1));
             }
         }
     }

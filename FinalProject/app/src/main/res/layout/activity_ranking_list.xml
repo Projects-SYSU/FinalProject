@@ -11,84 +11,84 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/userInfo"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:background="@android:color/holo_blue_bright"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:paddingLeft="5dp"-->
+            <!--android:paddingRight="5dp">-->
+            <!--<ImageView-->
+                <!--android:id="@+id/profilePhoto"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@mipmap/smile"-->
+                <!--android:adjustViewBounds="true"-->
+                <!--android:maxHeight="50dp"-->
+                <!--android:maxWidth="50dp"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_marginEnd="10dp"-->
+                <!--android:layout_marginStart="5dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:layout_marginLeft="5dp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/ranking_list_myrank"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="1"-->
+                <!--android:textSize="50dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:layout_centerHorizontal="true"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/ranking_list_mypoint"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="5000"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:textSize="25dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_alignBottom="@+id/ranking_list_myrank"-->
+                <!--android:gravity="center"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/ranking_list_myrank_tag"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:text="我的排名："-->
+                <!--android:textSize="15dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_alignBottom="@+id/ranking_list_myrank"-->
+                <!--android:layout_toLeftOf="@+id/ranking_list_myrank"-->
+                <!--android:layout_toStartOf="@+id/ranking_list_myrank" />-->
+            <!--<TextView-->
+                <!--android:id="@+id/ranking_list_mypoint_tag"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:text="我的积分："-->
+                <!--android:textSize="15dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_alignBottom="@+id/ranking_list_myrank"-->
+                <!--android:layout_toLeftOf="@+id/ranking_list_mypoint"-->
+                <!--android:layout_toStartOf="@+id/ranking_list_mypoint" />-->
+        <!--</RelativeLayout>-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="5dp"-->
+            <!--android:id="@+id/divider_in_rankinglistac"-->
+            <!--android:layout_below="@+id/userInfo"-->
+            <!--android:background="@android:color/background_light"/>-->
         <RelativeLayout
-            android:id="@+id/userInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@android:color/holo_blue_bright"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-            <ImageView
-                android:id="@+id/profilePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/smile"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp" />
-
-            <TextView
-                android:id="@+id/ranking_list_myrank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="50dp"
-                android:textColor="@android:color/white"
-                android:layout_centerHorizontal="true"/>
-
-            <TextView
-                android:id="@+id/ranking_list_mypoint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5000"
-                android:layout_alignParentEnd="true"
-                android:textSize="25dp"
-                android:textColor="@android:color/white"
-                android:layout_alignParentRight="true"
-                android:layout_alignBottom="@+id/ranking_list_myrank"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/ranking_list_myrank_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="我的排名："
-                android:textSize="15dp"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:layout_alignBottom="@+id/ranking_list_myrank"
-                android:layout_toLeftOf="@+id/ranking_list_myrank"
-                android:layout_toStartOf="@+id/ranking_list_myrank" />
-            <TextView
-                android:id="@+id/ranking_list_mypoint_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="我的积分："
-                android:textSize="15dp"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:layout_alignBottom="@+id/ranking_list_myrank"
-                android:layout_toLeftOf="@+id/ranking_list_mypoint"
-                android:layout_toStartOf="@+id/ranking_list_mypoint" />
-        </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:id="@+id/divider_in_rankinglistac"
-            android:layout_below="@+id/userInfo"
-            android:background="@android:color/background_light"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/divider_in_rankinglistac"
             android:id="@+id/title_relativelayout"
             android:background="@android:color/holo_blue_bright">
             <TextView
