@@ -8,21 +8,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RankingListActivity" />
-        <activity android:name=".CounterActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".RankingListActivity"
+            android:launchMode="singleInstance"
+            android:noHistory="true" />
+        <activity
+            android:name=".CounterActivity"
+            android:launchMode="singleInstance"
+            android:noHistory="true" />
+        <activity
+            android:name=".SettingsActivity"
+            android:launchMode="singleInstance"
+            android:noHistory="true" />
 
         <service
             android:name=".StepService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>
