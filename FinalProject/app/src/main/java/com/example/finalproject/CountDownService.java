@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 
 public class CountDownService extends Service {
     public int min;
+    private PowerManager.WakeLock wakeLock;
     private CountDownTimer countDownTimer;
     private final IBinder binder = new Mybinder();
 
@@ -50,5 +52,19 @@ public class CountDownService extends Service {
 
     public void cancelCountingDown() {
         countDownTimer.cancel();
+    }
+
+    @Override
+    public void onCreate() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakelockTag");
+        wakeLock.acquire();
+        super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        wakeLock.release();
+        super.onDestroy();
     }
 }

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private CountDownService countDownService;
     private Handler handler = new Handler();
     private LockScreenReceiver lockScreenReceiver = new LockScreenReceiver();
-    private PowerManager.WakeLock wakeLock;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -105,10 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter intentFilter = new IntentFilter(ACTION_SCREEN_OFF);
         registerReceiver(lockScreenReceiver, intentFilter);
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakelockTag");
-        wakeLock.acquire();
     }
 
     @Override
@@ -116,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(lockScreenReceiver);
         handler.removeCallbacks(runnable);
         unbindService(countDownSC);
-        wakeLock.release();
         super.onDestroy();
     }
 
