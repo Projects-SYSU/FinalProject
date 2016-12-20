@@ -3,17 +3,18 @@ package com.example.finalproject;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +23,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+
+import static android.content.Intent.ACTION_SCREEN_OFF;
 
 public class MainActivity extends AppCompatActivity {
+    static public boolean isLock;
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private TextView minutesView;
@@ -34,11 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private ImageView photo;
     private int min;
-    private boolean flag;
-    private CountDownTimer countDownTimer;
+    private boolean isWorking;
     private NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     private SharedPreferences sharedPreferences;
     private StepService stepService;
+    private CountDownService countDownService;
+    private Handler handler = new Handler();
+    private LockScreenReceiver lockScreenReceiver = new LockScreenReceiver();
+    private PowerManager.WakeLock wakeLock;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -51,13 +57,44 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private ServiceConnection countDownSC = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            countDownService = ((CountDownService.Mybinder)iBinder).getService();
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            countDownService = null;
+        }
+    };
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (countDownService.min > 0) {
+                min = countDownService.min;
+                int s = min % 60;
+                int m = min / 60;
+                String temp = m + ":" + numberFormat.format(s);
+                clock.setText(temp);
+                handler.postDelayed(runnable, 1000);
+            }
+            else {
+                reset();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, StepService.class);
-        bindService(intent, sc, BIND_AUTO_CREATE);
+//        Intent intent = new Intent(this, StepService.class);
+//        bindService(intent, sc, BIND_AUTO_CREATE);
+
+        Intent intent2 = new Intent(this, CountDownService.class);
+        bindService(intent2, countDownSC, BIND_AUTO_CREATE);
 
         numberFormat.setMinimumIntegerDigits(2);
         sharedPreferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
@@ -65,6 +102,22 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         setupDrawerContent(navigationView);
         setupListeners();
+
+        IntentFilter intentFilter = new IntentFilter(ACTION_SCREEN_OFF);
+        registerReceiver(lockScreenReceiver, intentFilter);
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakelockTag");
+        wakeLock.acquire();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(lockScreenReceiver);
+        handler.removeCallbacks(runnable);
+        unbindService(countDownSC);
+        wakeLock.release();
+        super.onDestroy();
     }
 
     private void findViews() {
@@ -107,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!flag) {
-                    flag = true;
+                if (!isWorking) {
+                    isWorking = true;
                     seekBar.setVisibility(View.INVISIBLE);
                     if (min > 60) {
                         photo.setImageResource(R.mipmap.happy);
@@ -119,25 +172,8 @@ public class MainActivity extends AppCompatActivity {
                     min *= 60;
                     startBtn.setText("放弃");
 
-                    countDownTimer = new CountDownTimer(min * 60000, 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            if (min > 0) {
-                                min--;
-                                int s = min % 60;
-                                int m = min / 60;
-                                String temp = m + ":" + numberFormat.format(s);
-                                clock.setText(temp);
-                            }
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            reset();
-                            flag = false;
-                        }
-                    };
-                    countDownTimer.start();
+                    countDownService.startCountingDown(min);
+                    handler.post(runnable);
                 } else {
                     failed();
                 }
@@ -146,10 +182,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void failed() {
-        flag = false;
+        isWorking = false;
+        handler.removeCallbacks(runnable);
         reset();
         photo.setImageResource(R.mipmap.unhappy);
-        countDownTimer.cancel();
+        countDownService.cancelCountingDown();
     }
 
     private void reset() {
@@ -161,27 +198,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (flag) {
-            failed();
-            editor.putBoolean("flag", true);
-        } else {
-            editor.putBoolean("flag", false);
+        Log.d("islock", isLock + "");
+        if (!isLock) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (isWorking) {
+                failed();
+                editor.putBoolean("isWorking", true);
+            } else {
+                editor.putBoolean("isWorking", false);
+            }
+            editor.putInt("min", min);
+            editor.commit();
         }
-        editor.putInt("min", min);
-        editor.commit();
         super.onStop();
     }
 
     @Override
     protected void onStart() {
-        min = sharedPreferences.getInt("min", 20);
-        flag = sharedPreferences.getBoolean("flag", false);
-        if (flag) {
-            photo.setImageResource(R.mipmap.unhappy);
-            seekBar.setProgress(min - 20);
-            flag = false;
+        if (!isLock) {
+            min = sharedPreferences.getInt("min", 20);
+            isWorking = sharedPreferences.getBoolean("isWorking", false);
+            if (isWorking) {
+                photo.setImageResource(R.mipmap.unhappy);
+                seekBar.setProgress(min - 20);
+                isWorking = false;
+            }
         }
+        isLock = false;
         super.onStart();
     }
 
