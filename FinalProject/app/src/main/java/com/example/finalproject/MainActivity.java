@@ -1,5 +1,8 @@
 package com.example.finalproject;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -79,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(runnable, 1000);
             }
             else {
+                Notification.Builder builder = new Notification.Builder(MainActivity.this);
+                builder.setContentTitle("内功修炼结束")
+                        .setTicker("内功修炼结束")
+                        .setContentText("内功修炼结束")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true);
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notify = builder.build();
+                manager.notify(0, notify);
                 reset();
             }
         }
@@ -184,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reset() {
+        isWorking = false;
         seekBar.setVisibility(View.VISIBLE);
         startBtn.setText("闭关");
         min = seekBar.getProgress() / 5 * 5 + 20;
