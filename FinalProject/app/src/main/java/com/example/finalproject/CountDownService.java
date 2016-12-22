@@ -33,6 +33,7 @@ public class CountDownService extends Service {
 
     public void startCountingDown(int minutes) {
         min = minutes;
+        min = 10;
         countDownTimer = new CountDownTimer(min * 60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

@@ -1,8 +1,5 @@
 package com.example.finalproject;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,42 +8,44 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
+import static android.content.Intent.ACTION_SCREEN_ON;
 
-public class MainActivity extends AppCompatActivity {
-    static public boolean isLock;
-
+public class MainActivity extends AppCompatActivity implements DynamicReceiver.DataInteraction{
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private TextView minutesView;
-    private TextView clock;
+    private TextView totalTime;
+    private TextView minutes;
+    private TextView seconds;
     private Button startBtn;
     private SeekBar seekBar;
     private ImageView photo;
-    private int min;
+
+    private int workingTime = 20;
     private boolean isWorking;
+    private boolean isLock;
+    private UserData userData = new UserData();
     private NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     private SharedPreferences sharedPreferences;
     private StepService stepService;
     private CountDownService countDownService;
     private Handler handler = new Handler();
-    private LockScreenReceiver lockScreenReceiver = new LockScreenReceiver();
+    private DynamicReceiver dynamicReceiver = new DynamicReceiver();
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -74,27 +73,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             if (countDownService.min > 0) {
-                min = countDownService.min;
-                int s = min % 60;
-                int m = min / 60;
-                String temp = m + ":" + numberFormat.format(s);
-                clock.setText(temp);
+                workingTime = countDownService.min;
+                int s = workingTime % 60;
+                int m = workingTime / 60;
+                minutes.setText(numberFormat.format(m) + "");
+                seconds.setText(numberFormat.format(s) + "");
                 handler.postDelayed(runnable, 1000);
             }
             else {
-                Notification.Builder builder = new Notification.Builder(MainActivity.this);
-                builder.setContentTitle("内功修炼结束")
-                        .setTicker("内功修炼结束")
-                        .setContentText("内功修炼结束")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setAutoCancel(true);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Notification notify = builder.build();
-                manager.notify(0, notify);
                 reset();
+                userData.workingTime += workingTime;
+                totalTime.setText(userData.workingTime + "分钟");
+                Toast.makeText(MainActivity.this, "闭关结束", Toast.LENGTH_SHORT).show();
             }
         }
     };
+
+    @Override
+    public void setIsLock(boolean flag) {
+        this.isLock = flag;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,20 +105,24 @@ public class MainActivity extends AppCompatActivity {
         Intent intent2 = new Intent(this, CountDownService.class);
         bindService(intent2, countDownSC, BIND_AUTO_CREATE);
 
-        numberFormat.setMinimumIntegerDigits(2);
-        sharedPreferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
+//        numberFormat.setMinimumIntegerDigits(2);
+//        sharedPreferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
 
         findViews();
         setupDrawerContent(navigationView);
         setupListeners();
 
-        IntentFilter intentFilter = new IntentFilter(ACTION_SCREEN_OFF);
-        registerReceiver(lockScreenReceiver, intentFilter);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_SCREEN_OFF);
+        intentFilter.addAction(ACTION_SCREEN_ON);
+        registerReceiver(dynamicReceiver, intentFilter);
+
+        numberFormat.setMinimumIntegerDigits(2);
     }
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(lockScreenReceiver);
+        unregisterReceiver(dynamicReceiver);
         handler.removeCallbacks(runnable);
         unbindService(countDownSC);
         super.onDestroy();
@@ -129,8 +131,9 @@ public class MainActivity extends AppCompatActivity {
     private void findViews() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.nvMenu);
-        minutesView = (TextView) findViewById(R.id.minutes);
-        clock = (TextView) findViewById(R.id.clock);
+        totalTime = (TextView) findViewById(R.id.totalTime);
+        minutes = (TextView) findViewById(R.id.minutes);
+        seconds = (TextView) findViewById(R.id.seconds);
         startBtn = (Button) findViewById(R.id.startBtn);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         photo = (ImageView) findViewById(R.id.photo);
@@ -141,14 +144,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    min = progress / 5 * 5 + 20;
-                    clock.setText(min + ":00");
-                    if (min > 60) {
-                        photo.setImageResource(R.mipmap.happy);
-                    }
-                    else {
-                        photo.setImageResource(R.mipmap.smile);
-                    }
+                    workingTime = progress / 5 * 5 + 20;
+                    minutes.setText(workingTime + "");
                 }
             }
 
@@ -169,70 +166,27 @@ public class MainActivity extends AppCompatActivity {
                 if (!isWorking) {
                     isWorking = true;
                     seekBar.setVisibility(View.INVISIBLE);
-                    if (min > 60) {
-                        photo.setImageResource(R.mipmap.happy);
-                    }
-                    else {
-                        photo.setImageResource(R.mipmap.smile);
-                    }
-                    min *= 60;
+                    workingTime *= 60;
                     startBtn.setText("放弃");
-
-                    countDownService.startCountingDown(min);
+                    countDownService.startCountingDown(workingTime);
                     handler.post(runnable);
                 } else {
-                    failed();
+                    countDownService.cancelCountingDown();
+                    reset();
                 }
             }
         });
-    }
-
-    private void failed() {
-        isWorking = false;
-        handler.removeCallbacks(runnable);
-        reset();
-        photo.setImageResource(R.mipmap.unhappy);
-        countDownService.cancelCountingDown();
+        dynamicReceiver.setDataListener(this);
     }
 
     private void reset() {
         isWorking = false;
+        handler.removeCallbacks(runnable);
         seekBar.setVisibility(View.VISIBLE);
+        workingTime = seekBar.getProgress() / 5 * 5 + 20;
+        minutes.setText(workingTime + "");
+        seconds.setText("00");
         startBtn.setText("闭关");
-        min = seekBar.getProgress() / 5 * 5 + 20;
-        clock.setText(min + ":00");
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d("islock", isLock + "");
-        if (!isLock) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isWorking) {
-                failed();
-                editor.putBoolean("isWorking", true);
-            } else {
-                editor.putBoolean("isWorking", false);
-            }
-            editor.putInt("min", min);
-            editor.commit();
-        }
-        super.onStop();
-    }
-
-    @Override
-    protected void onStart() {
-        if (!isLock) {
-            min = sharedPreferences.getInt("min", 20);
-            isWorking = sharedPreferences.getBoolean("isWorking", false);
-            if (isWorking) {
-                photo.setImageResource(R.mipmap.unhappy);
-                seekBar.setProgress(min - 20);
-                isWorking = false;
-            }
-        }
-        isLock = false;
-        super.onStart();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
