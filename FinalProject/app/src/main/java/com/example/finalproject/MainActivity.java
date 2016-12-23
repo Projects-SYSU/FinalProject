@@ -19,12 +19,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.NumberFormat;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
+import static com.example.finalproject.DynamicReceiver.COUNT_DOWN_FINISH;
 
 public class MainActivity extends AppCompatActivity implements DynamicReceiver.DataInteraction{
     private DrawerLayout drawerLayout;
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (countDownService.min > 0) {
-                workingTime = countDownService.min;
+            if (countDownService.seconds > 0) {
+                workingTime = countDownService.seconds;
                 int s = workingTime % 60;
                 int m = workingTime / 60;
                 minutes.setText(numberFormat.format(m) + "");
@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                 reset();
                 userData.workingTime += workingTime;
                 totalTime.setText(userData.workingTime + "分钟");
-                Toast.makeText(MainActivity.this, "闭关结束", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -105,8 +104,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         Intent intent2 = new Intent(this, CountDownService.class);
         bindService(intent2, countDownSC, BIND_AUTO_CREATE);
 
-//        numberFormat.setMinimumIntegerDigits(2);
-//        sharedPreferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("temp", Context.MODE_PRIVATE);
 
         findViews();
         setupDrawerContent(navigationView);
@@ -115,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_SCREEN_OFF);
         intentFilter.addAction(ACTION_SCREEN_ON);
+        intentFilter.addAction(COUNT_DOWN_FINISH);
         registerReceiver(dynamicReceiver, intentFilter);
 
         numberFormat.setMinimumIntegerDigits(2);

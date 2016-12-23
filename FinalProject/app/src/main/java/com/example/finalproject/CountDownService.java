@@ -9,12 +9,14 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import static com.example.finalproject.DynamicReceiver.COUNT_DOWN_FINISH;
+
 /**
  * Created by Shower on 2016/12/20 0020.
  */
 
 public class CountDownService extends Service {
-    public int min;
+    public int seconds;
     private PowerManager.WakeLock wakeLock;
     private CountDownTimer countDownTimer;
     private final IBinder binder = new Mybinder();
@@ -32,19 +34,22 @@ public class CountDownService extends Service {
     }
 
     public void startCountingDown(int minutes) {
-        min = minutes;
-        countDownTimer = new CountDownTimer(min * 60000, 1000) {
+        seconds = minutes * 60;
+        seconds = 10;
+        countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (min > 0) {
-                    min--;
-                    Log.d("min", min + "");
+                if (seconds > 0) {
+                    seconds--;
+                    Log.d("seconds", seconds + "");
                 }
             }
 
             @Override
             public void onFinish() {
-                min = 0;
+                seconds = 0;
+                Intent intent = new Intent(COUNT_DOWN_FINISH);
+                sendBroadcast(intent);
             }
         };
         countDownTimer.start();
