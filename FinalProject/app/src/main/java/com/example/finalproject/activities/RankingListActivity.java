@@ -267,6 +267,10 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                         intent = new Intent(RankingListActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.history:
+                        intent = new Intent(RankingListActivity.this, HistoryActivity.class);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }

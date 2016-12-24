@@ -31,6 +31,10 @@
             android:name=".activities.SettingsActivity"
             android:launchMode="singleInstance"
             android:noHistory="true" />
+        <activity
+            android:name=".activities.HistoryActivity"
+            android:launchMode="singleInstance"
+            android:noHistory="true" />
 
         <service
             android:name=".services.StepService"

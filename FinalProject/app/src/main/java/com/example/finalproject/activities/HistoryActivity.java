@@ -7,34 +7,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.finalproject.R;
 
-public class SettingsActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Button saveBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_history);
 
-        saveBtn = (Button) findViewById(R.id.save);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+        findView();
+        setupDrawerContent(navigationView);
+    }
 
+    private void findView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.nvMenu);
-
-        setupDrawerContent(navigationView);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -42,26 +34,27 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(true);
+                Intent intent;
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.home:
-                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                        intent = new Intent(HistoryActivity.this, MainActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.rankingList:
-                        intent = new Intent(SettingsActivity.this, RankingListActivity.class);
+                        intent = new Intent(HistoryActivity.this, RankingListActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.steps:
-                        intent = new Intent(SettingsActivity.this, CounterActivity.class);
+                        intent = new Intent(HistoryActivity.this, CounterActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.settings:
-                        item.setChecked(false);
+                        intent = new Intent(HistoryActivity.this, SettingsActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.history:
-                        intent = new Intent(SettingsActivity.this, HistoryActivity.class);
-                        startActivity(intent);
+                        item.setChecked(false);
                         break;
                     default:
                         break;

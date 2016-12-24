@@ -87,6 +87,10 @@ public class CounterActivity extends AppCompatActivity {
                         intent = new Intent(CounterActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.history:
+                        intent = new Intent(CounterActivity.this, HistoryActivity.class);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }

@@ -229,6 +229,10 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                         intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.history:
+                        intent = new Intent(MainActivity.this, HistoryActivity.class);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }

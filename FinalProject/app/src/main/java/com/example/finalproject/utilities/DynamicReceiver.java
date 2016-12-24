@@ -11,6 +11,7 @@ import android.util.Log;
 import com.example.finalproject.R;
 import com.example.finalproject.activities.MainActivity;
 
+import static android.app.Notification.DEFAULT_ALL;
 import static android.app.Notification.VISIBILITY_PUBLIC;
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
@@ -40,7 +41,8 @@ public class DynamicReceiver extends BroadcastReceiver {
                     .setContentText("闭关结束!!")
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
-                    .setVisibility(VISIBILITY_PUBLIC);
+                    .setVisibility(VISIBILITY_PUBLIC)
+                    .setDefaults(DEFAULT_ALL);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notify = builder.build();
             manager.notify(0, notify);
