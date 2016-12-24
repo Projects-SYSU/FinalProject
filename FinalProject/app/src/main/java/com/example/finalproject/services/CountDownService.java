@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import static com.example.finalproject.DynamicReceiver.COUNT_DOWN_FINISH;
+import static com.example.finalproject.utilities.DynamicReceiver.COUNT_DOWN_FINISH;
 
 /**
  * Created by Shower on 2016/12/20 0020.
@@ -22,7 +22,7 @@ public class CountDownService extends Service {
     private final IBinder binder = new Mybinder();
 
     public class Mybinder extends Binder {
-        CountDownService getService() {
+        public CountDownService getService() {
             return CountDownService.this;
         }
     }
@@ -35,7 +35,9 @@ public class CountDownService extends Service {
 
     public void startCountingDown(int minutes) {
         seconds = minutes * 60;
+
         seconds = 10;
+
         countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

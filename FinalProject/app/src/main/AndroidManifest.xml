@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalproject">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.DEVICE_POWER" />
+    <uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:launchMode="singleInstance"
             android:noHistory="true">
             <intent-filter>
@@ -20,26 +20,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RankingListActivity"
+            android:name=".activities.RankingListActivity"
             android:launchMode="singleInstance"
             android:noHistory="true" />
         <activity
-            android:name=".CounterActivity"
+            android:name=".activities.CounterActivity"
             android:launchMode="singleInstance"
             android:noHistory="true" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:launchMode="singleInstance"
             android:noHistory="true" />
 
         <service
-            android:name=".StepService"
+            android:name=".services.StepService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".CountDownService"
+            android:name=".services.CountDownService"
             android:enabled="true"
             android:exported="true" />
+
+        <receiver android:name=".utilities.StaticReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 

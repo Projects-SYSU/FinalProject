@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.finalproject.R;
 
 public class SettingsActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;

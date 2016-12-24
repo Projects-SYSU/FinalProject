@@ -1,12 +1,13 @@
-package com.example.finalproject;
+package com.example.finalproject.services;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
+
+import com.example.finalproject.utilities.StepDetector;
 
 public class StepService extends Service {
     private final IBinder binder = new MyBinder();
@@ -33,7 +34,7 @@ public class StepService extends Service {
     }
 
     public class MyBinder extends Binder {
-        StepService getService() {
+        public StepService getService() {
             return StepService.this;
         }
     }

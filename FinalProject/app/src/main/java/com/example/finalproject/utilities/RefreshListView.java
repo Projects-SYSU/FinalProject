@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.utilities;
 
 import android.content.Context;
 import android.text.format.Time;
@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.finalproject.R;
 
 /**
  * Created by 黄健军 on 2016/12/16.

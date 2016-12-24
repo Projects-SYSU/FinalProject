@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.finalproject.RankingListActivity">
+    tools:context="com.example.finalproject.activities.RankingListActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -103,13 +103,13 @@
                 android:textColor="@android:color/white" />
         </RelativeLayout>
 
-        <com.example.finalproject.RefreshListView
+        <com.example.finalproject.utilities.RefreshListView
             android:id="@+id/rankingList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title_relativelayout"
             android:divider="@android:drawable/divider_horizontal_bright">
-        </com.example.finalproject.RefreshListView>
+        </com.example.finalproject.utilities.RefreshListView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

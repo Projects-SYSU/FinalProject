@@ -1,7 +1,9 @@
-package com.example.finalproject;
+package com.example.finalproject.activities;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -20,13 +22,19 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.finalproject.services.CountDownService;
+import com.example.finalproject.utilities.DynamicReceiver;
+import com.example.finalproject.R;
+import com.example.finalproject.services.StepService;
+import com.example.finalproject.utilities.UserData;
+
 import java.text.NumberFormat;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
-import static com.example.finalproject.DynamicReceiver.COUNT_DOWN_FINISH;
+import static com.example.finalproject.utilities.DynamicReceiver.COUNT_DOWN_FINISH;
 
-public class MainActivity extends AppCompatActivity implements DynamicReceiver.DataInteraction{
+public class MainActivity extends AppCompatActivity implements DynamicReceiver.DataInteraction {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private TextView totalTime;
@@ -46,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
     private CountDownService countDownService;
     private Handler handler = new Handler();
     private DynamicReceiver dynamicReceiver = new DynamicReceiver();
+    private AlertDialog.Builder alertDialog;
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
@@ -82,8 +91,10 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
             }
             else {
                 reset();
-                userData.workingTime += workingTime;
-                totalTime.setText(userData.workingTime + "分钟");
+                userData.totalWorkingTime += workingTime;
+                totalTime.setText(userData.totalWorkingTime + "分钟");
+
+                alertDialog.setMessage("内功增加" + workingTime + "分钟").show();
             }
         }
     };
@@ -98,9 +109,8 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Intent intent = new Intent(this, StepService.class);
-//        bindService(intent, sc, BIND_AUTO_CREATE);
-
+        Intent intent = new Intent(this, StepService.class);
+        bindService(intent, sc, BIND_AUTO_CREATE);
         Intent intent2 = new Intent(this, CountDownService.class);
         bindService(intent2, countDownSC, BIND_AUTO_CREATE);
 
@@ -117,6 +127,14 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         registerReceiver(dynamicReceiver, intentFilter);
 
         numberFormat.setMinimumIntegerDigits(2);
+
+        alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).setTitle("本次闭关结束").create();
     }
 
     @Override
@@ -124,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         unregisterReceiver(dynamicReceiver);
         handler.removeCallbacks(runnable);
         unbindService(countDownSC);
+        unbindService(sc);
         super.onDestroy();
     }
 

@@ -1,10 +1,9 @@
-package com.example.finalproject;
+package com.example.finalproject.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -12,19 +11,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.finalproject.R;
+import com.example.finalproject.utilities.RefreshListView;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class RankingListActivity extends AppCompatActivity implements RefreshListView.IRefreshListener{
+public class RankingListActivity extends AppCompatActivity implements RefreshListView.IRefreshListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private List<Map<String, Object>> list_datas = new LinkedList();

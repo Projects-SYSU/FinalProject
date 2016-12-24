@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.utilities;
 
 import android.content.Context;
 import android.hardware.Sensor;
