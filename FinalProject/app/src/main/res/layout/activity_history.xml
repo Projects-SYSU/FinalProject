@@ -7,6 +7,37 @@
     android:layout_height="match_parent"
     tools:context="com.example.finalproject.activities.HistoryActivity">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="历史修炼"
+            android:textSize="40sp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart_working"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="20dp"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart_steps"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@+id/lineChart_working"
+            android:layout_marginTop="20dp" />
+    </RelativeLayout>
+
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nvMenu"
         android:layout_width="match_parent"
