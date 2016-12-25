@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.finalproject.R;
@@ -29,12 +30,10 @@ public class DynamicReceiver extends BroadcastReceiver {
         Log.d("tag", intent.getAction());
         if (intent.getAction().equals(ACTION_SCREEN_OFF)) {
             dataInteraction.setIsLock(true);
-        } else if (intent.getAction().equals(ACTION_SCREEN_ON)) {
-            dataInteraction.setIsLock(false);
         } else if (intent.getAction().equals(COUNT_DOWN_FINISH)) {
             Intent mainActivityIntent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mainActivityIntent, 0);
-            Notification.Builder builder = new Notification.Builder(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             builder.setContentTitle("闭关结束")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setTicker("闭关结束")
