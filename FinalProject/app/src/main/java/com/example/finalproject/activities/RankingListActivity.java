@@ -3,6 +3,7 @@ package com.example.finalproject.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -190,6 +191,16 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                         .show();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        SharedPreferences sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        String n = sharedPreferences.getString("name", "大侠");
+        name.setText(n);
+        super.onStart();
     }
 
     private void findView() {

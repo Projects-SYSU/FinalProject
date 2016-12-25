@@ -1,6 +1,7 @@
 package com.example.finalproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -8,6 +9,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.finalproject.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -36,7 +39,6 @@ public class HistoryActivity extends AppCompatActivity {
     private LineChart stepsChart;
     private final String[] xDates = new String[7];
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,16 @@ public class HistoryActivity extends AppCompatActivity {
         initX();
         setChartStyle(workingChart, prepareLineData("内功"));
         setChartStyle(stepsChart, prepareLineData("轻功"));
+    }
+
+    @Override
+    protected void onStart() {
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        SharedPreferences sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        String n = sharedPreferences.getString("name", "大侠");
+        name.setText(n);
+        super.onStart();
     }
 
     private void initX() {

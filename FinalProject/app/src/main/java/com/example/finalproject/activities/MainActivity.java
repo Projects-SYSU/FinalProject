@@ -175,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
             alertDialog.setTitle("闭关失败").setMessage("闭关失败").show();
             reset();
         }
+
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        String n = sharedPreferences.getString("name", "大侠");
+        name.setText(n);
         super.onStart();
     }
 
