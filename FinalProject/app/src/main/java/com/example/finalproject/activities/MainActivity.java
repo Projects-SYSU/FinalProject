@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                     handler.post(runnable);
                 } else {
                     countDownService.cancelCountingDown();
+                    alertDialog.setTitle("闭关失败").setMessage("闭关失败").show();
                     reset();
                 }
             }
