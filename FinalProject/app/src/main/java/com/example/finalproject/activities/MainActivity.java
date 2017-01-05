@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.finalproject.CustomerClient;
 import com.example.finalproject.services.CountDownService;
 import com.example.finalproject.utilities.DynamicReceiver;
 import com.example.finalproject.R;
@@ -131,25 +132,19 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
 
         numberFormat.setMinimumIntegerDigits(2);
 
-<<<<<<< Updated upstream:FinalProject/app/src/main/java/com/example/finalproject/activities/MainActivity.java
         alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
-<<<<<<< HEAD
         }).setTitle("本次闭关结束").create();
-=======
+
         // test web service
         CustomerClient.get(MainActivity.this, 1);
->>>>>>> Stashed changes:FinalProject/app/src/main/java/com/example/finalproject/MainActivity.java
-=======
-        }).create();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
->>>>>>> origin/master
     }
 
     @Override
