@@ -11,6 +11,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,12 @@ public class CustomerClient {
                 }
             }
         });
+    }
+
+    public static void getTotalCustomer(Context context, JsonHttpResponseHandler handler) {
+        List<Header> headers = new ArrayList<Header>();
+        headers.add(new BasicHeader("Accept", "application/json"));
+        client.get(context, url + "tot", headers.toArray(new Header[headers.size()]), null, handler);
     }
 
     public static void post(Context context, UserData userData) {

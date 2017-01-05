@@ -30,9 +30,16 @@ import com.example.finalproject.utilities.DynamicReceiver;
 import com.example.finalproject.R;
 import com.example.finalproject.services.StepService;
 import com.example.finalproject.utilities.UserData;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
@@ -140,8 +147,6 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
             }
         }).setTitle("本次闭关结束").create();
 
-        // test web service
-        CustomerClient.get(MainActivity.this, 1);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);

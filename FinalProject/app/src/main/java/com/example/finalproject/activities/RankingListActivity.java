@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,15 +22,23 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.finalproject.CustomerClient;
 import com.example.finalproject.R;
+import com.example.finalproject.UserData;
 import com.example.finalproject.utilities.RefreshListView;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
 
 public class RankingListActivity extends AppCompatActivity implements RefreshListView.IRefreshListener {
     private DrawerLayout drawerLayout;
@@ -229,7 +238,23 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     }
 
     private void get_data() {
-        list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
+        //list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                try {
+                    List<UserData> users = new ArrayList<UserData>();
+                    for (int i = 0; i < response.length(); i++) {
+                        users.add(new UserData(response.getJSONObject(i)));
+                        //Log.v("Test ", users.get(i).getName());
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        CustomerClient.getTotalCustomer(RankingListActivity.this, handler);
     }
 
     private void sort_list_data() {

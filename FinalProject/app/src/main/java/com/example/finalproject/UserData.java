@@ -7,6 +7,15 @@ import java.util.Date;
 public class UserData {
     public long id;
     public int workingTime;
+    public String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public long getId() {
         return id;
@@ -51,6 +60,7 @@ public class UserData {
             this.workingTime = jsonObject.getInt("workingTime");
             this.stepCount = jsonObject.getInt("stepCount");
             this.date = jsonObject.getString("date");
+            this.name = jsonObject.getString("name");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,6 +69,7 @@ public class UserData {
     public UserData() {
         workingTime = stepCount = 0;
         date = new String();
+        name = "temp";
     }
 
     public UserData(int workingTime, int stepCount, String date) {
@@ -66,6 +77,7 @@ public class UserData {
         this.stepCount = stepCount;
         this.date = date;
         this.id = 0;
+        this.name = "temp";
     }
 
     public String getJSON() {
@@ -75,6 +87,7 @@ public class UserData {
             jsonObject.put("workingTime", workingTime);
             jsonObject.put("stepCount", stepCount);
             jsonObject.put("date", date);
+            jsonObject.put("name", name);
         } catch (Exception e) {
             e.printStackTrace();
         }
