@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
 
         numberFormat.setMinimumIntegerDigits(2);
 
+<<<<<<< Updated upstream:FinalProject/app/src/main/java/com/example/finalproject/activities/MainActivity.java
         alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -135,6 +137,10 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
 
             }
         }).setTitle("本次闭关结束").create();
+=======
+        // test web service
+        CustomerClient.get(MainActivity.this, 1);
+>>>>>>> Stashed changes:FinalProject/app/src/main/java/com/example/finalproject/MainActivity.java
     }
 
     @Override
