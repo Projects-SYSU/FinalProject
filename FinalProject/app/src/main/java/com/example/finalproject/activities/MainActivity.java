@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -30,6 +31,7 @@ import com.example.finalproject.services.StepService;
 import com.example.finalproject.utilities.UserData;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
     private int workingTime = 20;
     private boolean isWorking;
     private boolean isLock;
-    private UserData userData = new UserData();
+    private UserData userData;
     private NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     private SharedPreferences sharedPreferences;
     private StepService stepService;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                 userData.totalWorkingTime += workingTime;
                 totalTime.setText(userData.totalWorkingTime + "分钟");
 
-                alertDialog.setMessage("内功增加" + workingTime + "分钟").show();
+                alertDialog.setTitle("本次闭关结束").setMessage("内功增加" + workingTime + "分钟").show();
             }
         }
     };
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         Intent intent2 = new Intent(this, CountDownService.class);
         bindService(intent2, countDownSC, BIND_AUTO_CREATE);
 
-        sharedPreferences = this.getSharedPreferences("temp", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("tempData", Context.MODE_PRIVATE);
 
         findViews();
         setupDrawerContent(navigationView);
@@ -136,11 +138,18 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
             public void onClick(DialogInterface dialog, int which) {
 
             }
+<<<<<<< HEAD
         }).setTitle("本次闭关结束").create();
 =======
         // test web service
         CustomerClient.get(MainActivity.this, 1);
 >>>>>>> Stashed changes:FinalProject/app/src/main/java/com/example/finalproject/MainActivity.java
+=======
+        }).create();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+>>>>>>> origin/master
     }
 
     @Override
@@ -150,6 +159,54 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         unbindService(countDownSC);
         unbindService(sc);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        workingTime = sharedPreferences.getInt("goalTime", 20);
+        seekBar.setProgress(workingTime - 20);
+        minutes.setText(workingTime + "");
+
+        int totalMinutes = sharedPreferences.getInt("minutes", 0);
+        totalTime.setText(totalMinutes + "分钟");
+
+        int steps = 0;
+        if (stepService != null) stepService.getSteps();
+        String today = sharedPreferences.getString("today", "2000-01-01");
+        isLock = sharedPreferences.getBoolean("isLock", false);
+        isWorking = sharedPreferences.getBoolean("isWorking", false);
+
+        try {
+            userData = new UserData(today, totalMinutes, steps);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (!isLock && isWorking) {
+            alertDialog.setTitle("闭关失败").setMessage("闭关失败").show();
+            reset();
+        }
+
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        String n = sharedPreferences.getString("name", "大侠");
+        name.setText(n);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("goalTime", seekBar.getProgress() / 5 * 5 + 20);
+        editor.putInt("minutes", userData.totalWorkingTime);
+        editor.putInt("steps", stepService.getSteps());
+        editor.putString("today", userData.getDate());
+        editor.putBoolean("isLock", isLock);
+        editor.putBoolean("isWorking", isWorking);
+        editor.commit();
+        if (!isLock && isWorking) {
+            countDownService.cancelCountingDown();
+        }
+        super.onStop();
     }
 
     private void findViews() {
@@ -196,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                     handler.post(runnable);
                 } else {
                     countDownService.cancelCountingDown();
+                    alertDialog.setTitle("闭关失败").setMessage("闭关失败").show();
                     reset();
                 }
             }
@@ -233,6 +291,10 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
                         break;
                     case R.id.settings:
                         intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.history:
+                        intent = new Intent(MainActivity.this, HistoryActivity.class);
                         startActivity(intent);
                         break;
                     default:

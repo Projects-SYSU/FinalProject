@@ -12,6 +12,9 @@
             android:id="@+id/rankingList"
             android:title="英雄榜"/>
         <item
+            android:id="@+id/history"
+            android:title="历史修炼"/>
+        <item
             android:id="@+id/settings"
             android:title="休整"/>
     </group>

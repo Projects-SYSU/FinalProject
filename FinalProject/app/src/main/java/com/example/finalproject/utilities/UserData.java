@@ -18,7 +18,7 @@ public class UserData {
     }
 
     public UserData(String date, int totalWorkingTime, int stepCount) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
         this.date = simpleDateFormat.parse(date);
         this.totalWorkingTime = totalWorkingTime;
         this.stepCount = stepCount;
@@ -30,7 +30,7 @@ public class UserData {
     }
 
     public String getDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
         return simpleDateFormat.format(date);
     }
 }

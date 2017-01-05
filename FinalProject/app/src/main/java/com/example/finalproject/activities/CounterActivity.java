@@ -1,6 +1,7 @@
 package com.example.finalproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
@@ -33,6 +35,16 @@ public class CounterActivity extends AppCompatActivity {
         myHandler = new MyHandler();
         MyThread myThread = new MyThread();
         new Thread(myThread).start();
+    }
+
+    @Override
+    protected void onStart() {
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        SharedPreferences sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        String n = sharedPreferences.getString("name", "大侠");
+        name.setText(n);
+        super.onStart();
     }
 
     class MyHandler extends Handler {
@@ -85,6 +97,10 @@ public class CounterActivity extends AppCompatActivity {
                         break;
                     case R.id.settings:
                         intent = new Intent(CounterActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.history:
+                        intent = new Intent(CounterActivity.this, HistoryActivity.class);
                         startActivity(intent);
                         break;
                     default:
