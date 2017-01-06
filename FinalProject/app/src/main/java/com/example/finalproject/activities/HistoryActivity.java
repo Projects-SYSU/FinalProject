@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.utilities.DBHelper;
+import com.example.finalproject.utilities.UserData;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -25,6 +27,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +41,8 @@ public class HistoryActivity extends AppCompatActivity {
     private LineChart workingChart;
     private LineChart stepsChart;
     private final String[] xDates = new String[7];
+    private List<Integer> workingTime = new ArrayList<>();
+    private List<Integer> steps = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +51,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         findView();
         setupDrawerContent(navigationView);
-
-        initX();
-        setChartStyle(workingChart, prepareLineData("内功"));
-        setChartStyle(stepsChart, prepareLineData("轻功"));
     }
 
     @Override
     protected void onStart() {
+        initX();
+        setChartStyle(workingChart, prepareLineData("内功"));
+        setChartStyle(stepsChart, prepareLineData("轻功"));
+
         View header = navigationView.getHeaderView(0);
         TextView name = (TextView) header.findViewById(R.id.name);
         SharedPreferences sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
@@ -81,6 +86,16 @@ public class HistoryActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nvMenu);
         workingChart = (LineChart) findViewById(R.id.lineChart_working);
         stepsChart = (LineChart) findViewById(R.id.lineChart_steps);
+    }
+
+    private void getData() throws ParseException {
+        DBHelper dbHelper = new DBHelper(HistoryActivity.this);
+        List<UserData> userData = dbHelper.getHistory();
+        for (int i = userData.size() - 1, k = 0; i >= 0 && k < 7; --i) {
+            workingTime.add(0, userData.get(i).totalWorkingTime);
+            steps.add(0, userData.get(i).stepCount);
+            k++;
+        }
     }
 
     private void setChartStyle(LineChart lineChart, LineData lineData) {
