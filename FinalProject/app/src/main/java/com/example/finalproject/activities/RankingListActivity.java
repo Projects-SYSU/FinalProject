@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -215,10 +216,7 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     private void findView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.nvMenu);
-        //listView = (ListView)findViewById(R.id.rankingList);
         refreshListView = (RefreshListView)findViewById(R.id.rankingList);
-//        myrank = (TextView)findViewById(R.id.ranking_list_myrank);
-//        mypoint = (TextView)findViewById(R.id.ranking_list_mypoint);
     }
 
     private void set_mydata() {
@@ -226,19 +224,9 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
         ME.put("point", 5005);
         ME.put("qing", 20005);
         ME.put("nei", 105);
-
-//        mypoint.setText(String.valueOf(5005));
     }
 
     private void update_data() {
-        get_data(); //from server? now nothing
-        sort_list_data();
-        myAdaptor.notifyDataSetChanged();
-        refreshListView.refreshComplete();
-    }
-
-    private void get_data() {
-        //list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
         JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -246,9 +234,21 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                     List<UserData> users = new ArrayList<UserData>();
                     for (int i = 0; i < response.length(); i++) {
                         users.add(new UserData(response.getJSONObject(i)));
-                        //Log.v("Test ", users.get(i).getName());
+                        Log.v("Test ", users.get(i).getName());
                     }
-
+//                    list_datas.clear();
+//                    for (int i = 0; i < users.size(); ++i) {
+//                        Map<String, Object> user = new HashMap<>();
+//                        user.put("name", users.get(i).getName());
+//                        user.put("point", users.get(i).getWorkingTime() + users.get(i).getStepCount());
+//                        user.put("qing", users.get(i).getStepCount());
+//                        user.put("nei", users.get(i).getWorkingTime());
+//                        list_datas.add(user);
+//                    }
+                    list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
+                    sort_list_data();
+                    myAdaptor.notifyDataSetChanged();
+                    refreshListView.refreshComplete();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

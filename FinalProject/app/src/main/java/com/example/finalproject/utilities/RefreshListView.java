@@ -247,11 +247,11 @@ public class RefreshListView extends ListView implements OnScrollListener {
         TextView lastUpdateTime = (TextView)findViewById(R.id.time);
         lastUpdateTime.setText(time+"分钟前更新");
     }
-    public void setInterface(IRefreshListener listener){
+    public void setInterface(IRefreshListener listener) {
         this.iRefreshlistener = listener;
     }
 
-    public interface IRefreshListener{
+    public interface IRefreshListener {
         void onRefresh();
     }
 }
