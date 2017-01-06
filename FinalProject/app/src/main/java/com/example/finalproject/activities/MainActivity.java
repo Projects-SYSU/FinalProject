@@ -43,6 +43,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_SCREEN_ON;
+import static android.content.Intent.ACTION_TIME_TICK;
 import static com.example.finalproject.utilities.DynamicReceiver.COUNT_DOWN_FINISH;
 
 public class MainActivity extends AppCompatActivity implements DynamicReceiver.DataInteraction {
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
         intentFilter.addAction(ACTION_SCREEN_OFF);
         intentFilter.addAction(ACTION_SCREEN_ON);
         intentFilter.addAction(COUNT_DOWN_FINISH);
+        intentFilter.addAction(ACTION_TIME_TICK);
         registerReceiver(dynamicReceiver, intentFilter);
 
         numberFormat.setMinimumIntegerDigits(2);
