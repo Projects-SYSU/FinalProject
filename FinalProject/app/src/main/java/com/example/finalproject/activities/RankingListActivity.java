@@ -236,16 +236,16 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                         users.add(new UserData(response.getJSONObject(i)));
                         Log.v("Test ", users.get(i).getName());
                     }
-//                    list_datas.clear();
-//                    for (int i = 0; i < users.size(); ++i) {
-//                        Map<String, Object> user = new HashMap<>();
-//                        user.put("name", users.get(i).getName());
-//                        user.put("point", users.get(i).getWorkingTime() + users.get(i).getStepCount());
-//                        user.put("qing", users.get(i).getStepCount());
-//                        user.put("nei", users.get(i).getWorkingTime());
-//                        list_datas.add(user);
-//                    }
-                    list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
+                    list_datas.clear();
+                    for (int i = 0; i < users.size(); ++i) {
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("name", users.get(i).getName());
+                        user.put("point", users.get(i).getWorkingTime() + users.get(i).getStepCount());
+                        user.put("qing", users.get(i).getStepCount());
+                        user.put("nei", users.get(i).getWorkingTime());
+                        list_datas.add(user);
+                    }
+//                    list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
                     sort_list_data();
                     myAdaptor.notifyDataSetChanged();
                     refreshListView.refreshComplete();
