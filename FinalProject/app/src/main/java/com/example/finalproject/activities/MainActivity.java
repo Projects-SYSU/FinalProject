@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements DynamicReceiver.D
             if (countDownService.seconds > 0) {
                 workingTime = countDownService.seconds;
                 int s = workingTime % 60;
-                int m = workingTime / 60;
+                int m = workingTime / 3600;
+                Log.i("s", s + "");
+                Log.i("m", m + "");
                 minutes.setText(numberFormat.format(m) + "");
                 seconds.setText(numberFormat.format(s) + "");
                 handler.postDelayed(runnable, 1000);
