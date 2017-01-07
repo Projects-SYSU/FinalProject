@@ -46,8 +46,6 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     private NavigationView navigationView;
     private List<Map<String, Object>> list_datas = new LinkedList();
     private Map<String, Object> ME = new HashMap<>();
-//    private TextView myrank;
-//    private TextView mypoint;
     private MyAdaptor myAdaptor;
     private RefreshListView refreshListView;
 
@@ -174,13 +172,12 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
         set_mydata();
 
         init_list_data();
-        sort_list_data();
-        myAdaptor = new MyAdaptor(this, list_datas, ME);
-        refreshListView.setAdapter(myAdaptor);
         refreshListView.setInterface(RankingListActivity.this);
         refreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("pos", String.valueOf(position));
+                position--;
                 //set dialoglayout
                 RelativeLayout rl_dia = (RelativeLayout)LayoutInflater.from(RankingListActivity.this)
                         .inflate(R.layout.rankinglist_dialog, null);
@@ -220,10 +217,10 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     }
 
     private void set_mydata() {
-        ME.put("name", "N5");
-        ME.put("point", 5005);
-        ME.put("qing", 20005);
-        ME.put("nei", 105);
+        ME.put("name", "Lala");
+        ME.put("point", 6050);
+        ME.put("qing", 6000);
+        ME.put("nei", 50);
     }
 
     private void update_data() {
@@ -235,6 +232,8 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
                     for (int i = 0; i < response.length(); i++) {
                         users.add(new UserData(response.getJSONObject(i)));
                         Log.v("Test ", users.get(i).getName());
+                        Log.v("Test ", String.valueOf(users.get(i).getWorkingTime()));
+                        Log.v("Test ", String.valueOf(users.get(i).getStepCount()));
                     }
                     list_datas.clear();
                     for (int i = 0; i < users.size(); ++i) {
@@ -270,15 +269,49 @@ public class RankingListActivity extends AppCompatActivity implements RefreshLis
     }
 
     private void init_list_data() {
-        int data_num = 10;
-        for (int i = 0; i < data_num; ++i) {
-            Map<String, Object> t = new HashMap<>();
-            t.put("name", String.format("N%d", i));
-            t.put("nei", 100 + i);
-            t.put("qing", 20000 + i);
-            t.put("point", 5000 + i);
-            list_datas.add(t);
-        }
+        JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                try {
+                    List<UserData> users = new ArrayList<UserData>();
+                    for (int i = 0; i < response.length(); i++) {
+                        users.add(new UserData(response.getJSONObject(i)));
+                        Log.v("Test ", users.get(i).getName());
+                        Log.v("Test ", String.valueOf(users.get(i).getWorkingTime()));
+                        Log.v("Test ", String.valueOf(users.get(i).getStepCount()));
+                    }
+                    list_datas.clear();
+                    for (int i = 0; i < users.size(); ++i) {
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("name", users.get(i).getName());
+                        user.put("point", users.get(i).getWorkingTime() + users.get(i).getStepCount());
+                        user.put("qing", users.get(i).getStepCount());
+                        user.put("nei", users.get(i).getWorkingTime());
+                        list_datas.add(user);
+                    }
+                    sort_list_data();
+                    myAdaptor = new MyAdaptor(RankingListActivity.this, list_datas, ME);
+                    refreshListView.setAdapter(myAdaptor);
+//                    list_datas.get(0).put("point", (int)list_datas.get(0).get("point") - 10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        CustomerClient.getTotalCustomer(RankingListActivity.this, handler);
+//        int data_num = 10;
+//        for (int i = 0; i < data_num; ++i) {
+//            Map<String, Object> t = new HashMap<>();
+//            t.put("name", String.format("N%d", i));
+//            t.put("nei", 100 + i);
+//            t.put("qing", 20000 + i);
+//            t.put("point", 5000 + i);
+//            list_datas.add(t);
+//        }
+//        sort_list_data();
+//        myAdaptor = new MyAdaptor(RankingListActivity.this, list_datas, ME);
+//        refreshListView.setAdapter(myAdaptor);
+//        refreshListView.setInterface(RankingListActivity.this);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
