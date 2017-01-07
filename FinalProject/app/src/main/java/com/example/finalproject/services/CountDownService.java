@@ -35,9 +35,6 @@ public class CountDownService extends Service {
 
     public void startCountingDown(int minutes) {
         seconds = minutes * 60;
-
-        seconds = 10;
-
         countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
