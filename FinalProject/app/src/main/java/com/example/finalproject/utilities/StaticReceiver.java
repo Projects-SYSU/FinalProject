@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.finalproject.services.StepService;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import static android.content.Intent.ACTION_BOOT_COMPLETED;
 import static android.content.Intent.ACTION_DATE_CHANGED;
@@ -31,14 +32,18 @@ public class StaticReceiver extends BroadcastReceiver {
             String date = sharedPreferences.getString("today", "2000-01-01");
             DBHelper helper = new DBHelper(context);
             try {
+                Log.i("insert", "insert");
                 helper.insert(new UserData(date, totalWorkingTime, totalSteps));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
+            UserData tempU = new UserData();
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("minutes", 0);
             editor.putInt("steps", 0);
+            editor.putString("today", tempU.getDate());
             editor.commit();
             StepDetector.CURRENT_STPEPS = 0;
         }

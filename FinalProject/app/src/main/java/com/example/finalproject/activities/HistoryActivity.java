@@ -55,9 +55,14 @@ public class HistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        try {
+            getData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         initX();
-        setChartStyle(workingChart, prepareLineData("内功"));
-        setChartStyle(stepsChart, prepareLineData("轻功"));
+        setChartStyle(workingChart, prepareLineData("内功", workingTime));
+        setChartStyle(stepsChart, prepareLineData("轻功", steps));
 
         View header = navigationView.getHeaderView(0);
         TextView name = (TextView) header.findViewById(R.id.name);
@@ -91,9 +96,17 @@ public class HistoryActivity extends AppCompatActivity {
     private void getData() throws ParseException {
         DBHelper dbHelper = new DBHelper(HistoryActivity.this);
         List<UserData> userData = dbHelper.getHistory();
-        for (int i = userData.size() - 1, k = 0; i >= 0 && k < 7; --i) {
+        int k = 0;
+        workingTime.clear();
+        steps.clear();
+        for (int i = userData.size() - 1; i >= 0 && k < 7; --i) {
             workingTime.add(0, userData.get(i).totalWorkingTime);
             steps.add(0, userData.get(i).stepCount);
+            k++;
+        }
+        while (k < 7) {
+            workingTime.add(0, 0);
+            steps.add(0, 0);
             k++;
         }
     }
@@ -127,11 +140,11 @@ public class HistoryActivity extends AppCompatActivity {
         lineChart.setDescription(description);
     }
 
-    private LineData prepareLineData(String s) {
+    private LineData prepareLineData(String s, List<Integer> list) {
         List<Entry> entries = new ArrayList<>();
 
-        for (int i = 1; i <= 7; ++i) {
-            entries.add(new Entry(i, (float) (10000 * Math.random())));
+        for (int i = 1; i <= list.size(); ++i) {
+            entries.add(new Entry(i, list.get(i - 1)));
         }
 
         LineDataSet lineDataSet = new LineDataSet(entries, s);
